@@ -17,6 +17,7 @@
 #include "oscam-time.h"
 
 static int8_t running;
+int32_t seconds, secs, fullmins, mins, hours, days, fullhours;
 
 static void refresh_lcd_file(void)
 {
@@ -38,9 +39,14 @@ static void refresh_lcd_file(void)
 	}
 
 	int8_t iscccam = 0;
-	int32_t seconds = 0, secs = 0, fullmins = 0, mins = 0, fullhours = 0, hours = 0,    days = 0;
+	fullhours = 0;
+	fullmins = 0;
+	seconds = 0;
+	hours = 0;
+	mins = 0;
+	secs = 0;
+	days = 0;
 	time_t now;
-
 
 	while(running)
 	{
@@ -150,7 +156,7 @@ static void refresh_lcd_file(void)
 						}
 					}
 
-					int16_t written = 0, skipped = 0, blocked = 0, error = 0;
+					uint16_t written = 0, skipped = 0, blocked = 0, error = 0;
 
 					char emmtext[16] = "               ";
 					if(cl->typ == 'r' || !iscccam)
@@ -215,12 +221,12 @@ static void refresh_lcd_file(void)
 				seconds = now - cl->lastecm;
 
 				if(cl->typ == 'c' && seconds < 15)
-				{		
+				{
 					type = "U";
 					idx = count_u;
 					label = cl->account->usr;
 					count_u++;
-							
+
 					get_servicename(cl, cl->last_srvid, cl->last_provid, cl->last_caid, channame, sizeof(channame));
 					fprintf(fpsave, "%s%d | %-10.10s | %-10.10s:%-17.17s| % 4d\n",
 							type,
